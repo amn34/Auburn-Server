@@ -32,7 +32,7 @@ app.get("/:city/:state", async (request, response) => {
         "vulnerability-level": countyData.riskLevels.overall,
     }
 
-    response.send(JSON.stringify(result))
+    response.send(result)
 })
 
 app.listen(process.env.PORT || 5000, () => {
