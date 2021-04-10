@@ -6,39 +6,19 @@ const fetch = require("node-fetch")
 require('dotenv').config()
 
 app.get("/:state", async (request, response) => {
-    const state = request.params.state
+    const state = request.params.state.toUpperCase()
     const covidStateURL = `https://api.covidactnow.org/v2/state/${state}.json?apiKey=${process.env.COVIDAPI}`
-    response.send(getCovidData(covidStateURL));
+    const covidData = await getCovidData(covidStateURL);
+    response.send(covidData);
 })
 
 app.get("/:state/:city", async (request, response) => {
     const city = request.params.city
     const state = request.params.state
     const countyCode = getCountyCode(city, state)
-
-    // make a call to the covidActNow api and return the data we need
     const covidURL = `https://api.covidactnow.org/v2/county/${countyCode}.json?apiKey=${process.env.COVIDAPI}`
-    
-    // get api data stuff here 
-    //const countyRequest = await fetch(covidURL);
-    //const countyData = await countyRequest.json()
-    //console.log(countyData);
-
-    // store used data in here
-    // const result = {
-    //     "new-cases" : countyData.actuals.newCases,
-    //     "new-deaths": countyData.actuals.newDeaths,
-    //     "tot-cases": countyData.actuals.cases,
-    //     "tot-deaths" : countyData.actuals.deaths,
-    //     "infection-rate": countyData.metrics.infectionRate,
-    //     "positive-test-rate": countyData.metrics.testPositivityRatio,
-    //     "percent-vaccinated": countyData.metrics.vaccinationsCompletedRatio,
-    //     "vaccines-administered": countyData.actuals.vaccinesAdministered,
-    //     "vaccines-completed": countyData.actuals.vaccinationsCompleted,
-    //     "vulnerability-level": countyData.riskLevels.overall,
-    // }
-
-    response.send(getCovidData(covidURL))
+    const covidData = await getCovidData(covidURL)
+    response.send(covidData)
 })
 
 app.listen(process.env.PORT || 5000, () => {
@@ -52,10 +32,9 @@ app.listen(process.env.PORT || 5000, () => {
  * @returns A JSON object containing the statistics in use for the applications
  */
 async function getCovidData(covidURL) {
-    const countyRequest = await fetch(covidURL);
-    const data = await countyRequest.json()
+    const dataRequest = await fetch(covidURL)
+    const data = await dataRequest.json()
 
-    // Return the data we will use 
     return {
         "new-cases" : data.actuals.newCases,
         "new-deaths": data.actuals.newDeaths,
