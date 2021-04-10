@@ -10,7 +10,7 @@ app.get("/:city/:state", (request, response) => {
     // make a call to the covidActNow api and return the data we need
     const covidURL = `https://api.covidactnow.org/v2/county/${countyCode}.json?apiKey=${process.env.COVIDAPI}`
     // get api data stuff here 
-    
+
 
     // store used data in here
     const result = {
