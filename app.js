@@ -4,7 +4,7 @@ const app = express()
 
 app.get("/:location?", (request, response) => {
     // make a call to the covidActNow api and return the data we need
-    const location = request.params.name ? request.params.name : 'Alabama';
+    const location = request.params.location ? request.params.location : 'Alabama';
 
 
     // get api data stuff here 
