@@ -2,6 +2,7 @@ const { request, response } = require('express')
 const express = require('express')
 const app = express()
 const fetch = require("node-fetch")
+const cities = require('all-the-cities')
 
 require('dotenv').config()
 
@@ -15,7 +16,7 @@ app.get("/:state", async (request, response) => {
 app.get("/:state/:city", async (request, response) => {
     const city = request.params.city
     const state = request.params.state
-    const countyCode = getCountyCode(city, state)
+    const countyCode = await getCountyCode(city, state)
     const covidURL = `https://api.covidactnow.org/v2/county/${countyCode}.json?apiKey=${process.env.COVIDAPI}`
     const covidData = await getCovidData(covidURL)
     response.send(covidData)
@@ -49,10 +50,13 @@ async function getCovidData(covidURL) {
     }
 }
 
-function getCountyCode(city, state) {
+async function getCountyCode(cityName, stateName) {
 
+    const latlong = cities.filter(city => city.name.match(cityName))[0].loc.coordinates
+    console.log(latlong)
+    const countyCodeURL = "https://geo.fcc.gov/api/census/area?lat=38.26&lon=-77.51&format=json"
+    const response = await fetch(countyCodeURL)
+    const data = await response.json()
 
-
-
-    return "01081"; //default auburn,alabama county code
+    return data.results[0].county_fips || "01081"; //default auburn,alabama county code
 }
