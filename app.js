@@ -50,7 +50,7 @@ async function getCovidData(covidURL) {
     }
 }
 
-async function getCountyCode(cityName, stateName) {
+async function getCountyCode(cityName) {
 
     const latlong = cities.filter(city => city.name.match(cityName))[0].loc.coordinates
     console.log(latlong)
