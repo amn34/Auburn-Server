@@ -10,7 +10,7 @@ app.use(cors())
 
 
 app.get("/", (request, response) => {
-    response.send("Welcome to the CovidStats API");
+    response.send("Welcome to the CovidStats API!");
 })
 
 app.get("/:state", async (request, response) => {
