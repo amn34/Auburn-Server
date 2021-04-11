@@ -37,10 +37,10 @@ async function getCovidData(covidURL) {
     const data = await dataRequest.json()
 
     return {
-        "new-cases" : data.actuals.newCases,
+        "new-cases": data.actuals.newCases,
         "new-deaths": data.actuals.newDeaths,
         "tot-cases": data.actuals.cases,
-        "tot-deaths" : data.actuals.deaths,
+        "tot-deaths": data.actuals.deaths,
         "infection-rate": data.metrics.infectionRate,
         "positive-test-rate": data.metrics.testPositivityRatio,
         "percent-vaccinated": data.metrics.vaccinationsCompletedRatio,
@@ -50,11 +50,13 @@ async function getCovidData(covidURL) {
     }
 }
 
-async function getCountyCode(cityName) {
-
-    const latlong = cities.filter(city => city.name.match(cityName))[0].loc.coordinates
-    console.log(latlong)
-    const countyCodeURL = "https://geo.fcc.gov/api/census/area?lat=38.26&lon=-77.51&format=json"
+async function getCountyCode(cityName, stateName) {
+    const matches = cities.filter(city =>
+        city.name.toLowerCase() === cityName.toLowerCase() && 
+        city.adminCode.toLowerCase() === stateName
+    )
+    const latlong = matches[0].loc.coordinates
+    const countyCodeURL = `https://geo.fcc.gov/api/census/area?lat=${latlong[1]}&lon=${latlong[0]}&format=json`
     const response = await fetch(countyCodeURL)
     const data = await response.json()
 
