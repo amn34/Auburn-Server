@@ -3,8 +3,11 @@ const express = require('express')
 const app = express()
 const fetch = require("node-fetch")
 const cities = require('all-the-cities')
+const cors = require('cors')
 
 require('dotenv').config()
+app.use(cors())
+
 
 app.get("/", (request, response) => {
     response.send("Welcome to the CovidStats API");
