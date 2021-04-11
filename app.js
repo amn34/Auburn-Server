@@ -53,7 +53,7 @@ async function getCovidData(covidURL) {
 async function getCountyCode(cityName, stateName) {
     const matches = cities.filter(city =>
         city.name.toLowerCase() === cityName.toLowerCase() && 
-        city.adminCode.toLowerCase() === stateName
+        city.adminCode.toLowerCase() === stateName.toLowerCase()
     )
     const latlong = matches[0].loc.coordinates
     const countyCodeURL = `https://geo.fcc.gov/api/census/area?lat=${latlong[1]}&lon=${latlong[0]}&format=json`
